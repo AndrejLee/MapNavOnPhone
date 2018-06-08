@@ -13,9 +13,12 @@ public class Client : MonoBehaviour
     private Socket _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
     private byte[] _recieveBuffer = new byte[8142];
     private const String COORDINATE_KEYWORD = "0001:";
+    private const String URL_KEYWORD = "0002:";
     public static float XReceived = 0;
     public static float YReceived = 0;
+    public static String URLReceived = "";
     private bool isSocketReady = false;
+    public static bool isURLReceived = false;
 
     public void SetupServer()
     {
@@ -72,15 +75,25 @@ public class Client : MonoBehaviour
             case COORDINATE_KEYWORD:
                 extractCoordination(tokens[0]);
                 break;
+            case URL_KEYWORD:
+                extractURL(tokens[0]);
+                break;
         }
 
         //Start receiving again
         _clientSocket.BeginReceive(_recieveBuffer, 0, _recieveBuffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), null);
     }
 
+    private void extractURL(string v)
+    {
+        URLReceived = v.Substring(5, v.Length - 5);
+        isURLReceived = true;
+        MoveCameraController.isLoaded = true;
+    }
+
     private void extractCoordination(String buffer)
     {   
-        String data = buffer.Substring(5, buffer.Length - 6);
+        String data = buffer.Substring(5, buffer.Length - 5);
         String[] res = data.Split('|');
         XReceived = float.Parse(res[0]);
         YReceived = float.Parse(res[1]);

@@ -24,13 +24,18 @@ public class MoveCameraController : MonoBehaviour {
             Vector2 receivedData = Client.getReceivedCoord();
             text.text = receivedData.x + "\t" + receivedData.y;
             MoveCamera(receivedData.x, receivedData.y, -12f);
+            if (Client.isURLReceived)
+            {
+                Client.isURLReceived = false;
+                Application.OpenURL(Client.URLReceived);
+            }
         }
 	}
 
     private void MoveCamera(float x, float y, float z)
     {
         Vector3 newPos = new Vector3(x, y, z);
-        //camera.transform.localPosition = Vector3.Lerp(camera.transform.localPosition, newPos, Time.deltaTime * 10f);
-        camera.transform.localPosition = newPos;
+        camera.transform.localPosition = Vector3.Lerp(camera.transform.localPosition, newPos, Time.deltaTime * 10f);
+        //camera.transform.localPosition = newPos;
     }
 }
