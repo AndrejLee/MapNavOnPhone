@@ -12,6 +12,7 @@ public class MoveCameraController : MonoBehaviour {
     private int i = 0;
     private int move = 0;
     public Text text;
+
     // Use this for initialization
     void Start () {
         camera = GameObject.Find("Camera");

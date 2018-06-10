@@ -294,6 +294,8 @@
   <ItemGroup>
     <Compile Include="Assets\Client.cs" />
     <Compile Include="Assets\MAPNAV\Scripts\MoveCameraController.cs" />
+    <Compile Include="Assets\Script\Constant.cs" />
+    <Compile Include="Assets\Script\MotionDetector.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

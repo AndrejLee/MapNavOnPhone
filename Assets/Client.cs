@@ -17,13 +17,14 @@ public class Client : MonoBehaviour
     public static float XReceived = 0;
     public static float YReceived = 0;
     public static String URLReceived = "";
-    private bool isSocketReady = false;
+    public static bool isSocketReady = false;
     public static bool isURLReceived = false;
 
     public void SetupServer()
     {
         try
         {
+            _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             _clientSocket.Connect(new IPEndPoint(IPAddress.Parse("192.168.1.10") , 1234));
             _clientSocket.BeginReceive(_recieveBuffer, 0, _recieveBuffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), null);
             isSocketReady = true;
@@ -44,6 +45,7 @@ public class Client : MonoBehaviour
         try
         {
             _clientSocket.Close();
+            _clientSocket = null;
         }
         catch (Exception e)
         {
@@ -66,7 +68,7 @@ public class Client : MonoBehaviour
 
         //Process data here the way you want , all your bytes will be stored in recData
         string Receiver = Encoding.ASCII.GetString(recData);
-        string[] tokens = Receiver.Split('@');
+        string[] tokens = Receiver.Split(Constant.TOKEN_END.ToCharArray());
 
         string keyWord = tokens[0].Substring(0, 5);
 
@@ -94,7 +96,7 @@ public class Client : MonoBehaviour
     private void extractCoordination(String buffer)
     {   
         String data = buffer.Substring(5, buffer.Length - 5);
-        String[] res = data.Split('|');
+        String[] res = data.Split(Constant.TOKEN_SPLIT.ToCharArray());
         XReceived = float.Parse(res[0]);
         YReceived = float.Parse(res[1]);
         MoveCameraController.isLoaded = true;
@@ -105,10 +107,12 @@ public class Client : MonoBehaviour
         return new Vector2(XReceived, YReceived);
     }
 
-    private void SendData(byte[] data)
+    public void SendData(string message)
     {
+        byte[] data = Encoding.ASCII.GetBytes(message);
         SocketAsyncEventArgs socketAsyncData = new SocketAsyncEventArgs();
         socketAsyncData.SetBuffer(data, 0, data.Length);
         _clientSocket.SendAsync(socketAsyncData);
     }
+    
 }
