@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,9 +17,11 @@ public class MotionDetector : MonoBehaviour
     // This next parameter is initialized to 2.0 per Apple's recommendation,
     // or at least according to Brady! ;)
     float shakeDetectionThreshold = 2.0f;
+    float accelerationZThreshold = 1.5f;
 
     float lowPassFilterFactor;
     Vector3 lowPassValue;
+    bool isFlipped = false;
 
     void Start()
     {
@@ -35,22 +38,86 @@ public class MotionDetector : MonoBehaviour
         Vector3 acceleration = Input.acceleration;
         lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
         Vector3 deltaAcceleration = acceleration - lowPassValue;
-
+        // For Zooming (rejected)
+        //float accelerationZ = Input.acceleration.x;
+        /*if (Math.Abs(accelerationZ) > accelerationZThreshold)
+        {
+            warningDebug.text = "Zoom event detected at value " + accelerationZ;
+            Debug.Log("Zoom event detected at time " + Time.time);
+            float zoomVal = 0;
+            if (accelerationZ > 0 ? true : false)
+            {
+                zoomVal = accelerationZ;
+                ZoomMap(zoomVal);
+            } else
+            {
+                zoomVal = accelerationZ;
+                ZoomMap(zoomVal);
+            }
+        } else */
         if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold)
         {
             // Perform your "shaking actions" here. If necessary, add suitable
             // guards in the if check above to avoid redundant handling during
             // the same shake (e.g. a minimum refractory period).
-            warningDebug.text = "Shake event detected at time " + Time.time;
+            warningDebug.text = "Shake event detected at value " + deltaAcceleration.sqrMagnitude;
             Debug.Log("Shake event detected at time " + Time.time);
             if (Client.isSocketReady)
             {
-                socket.SendData(Constant.TOKEN_BEGIN_SHAKE);
+                socket.SendData(Constant.TOKEN_BEGIN_SHAKE + Constant.TOKEN_END);
                 StatusSendSocket.text = "Send shake complete";
             } else
             {
                 StatusSendSocket.text = "Send shake fail";
             }
+        }
+
+        switch (Input.deviceOrientation)
+        {
+            case DeviceOrientation.FaceUp:
+                isFlipped = true;
+                break;
+            case DeviceOrientation.FaceDown:
+                if (isFlipped)
+                {
+                    ChangeMapType();
+                    isFlipped = false;
+                }
+                break;
+            case DeviceOrientation.Portrait:
+                showBarChart();
+                break;
+        }
+    }
+
+    private void ZoomMap(float zoomVal)
+    {
+        if (Client.isSocketReady)
+        {
+            socket.SendData(Constant.TOKEN_BEGIN_ZOOM + ":" + zoomVal + Constant.TOKEN_END);
+            StatusSendSocket.text = "Send zoom complete";
+        }
+        else
+        {
+            StatusSendSocket.text = "Send zoom fail";
+        }
+    }
+
+    private void showBarChart()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void ChangeMapType()
+    {
+        if (Client.isSocketReady)
+        {
+            socket.SendData(Constant.TOKEN_BEGIN_FLIP + Constant.TOKEN_END);
+            StatusSendSocket.text = "Send flip complete";
+        }
+        else
+        {
+            StatusSendSocket.text = "Send flip fail";
         }
     }
 
@@ -58,7 +125,7 @@ public class MotionDetector : MonoBehaviour
     {
         if (Client.isSocketReady)
         {
-            socket.SendData(Constant.TOKEN_BEGIN_FREEZE);
+            socket.SendData(Constant.TOKEN_BEGIN_FREEZE + Constant.TOKEN_END);
             StatusSendSocket.text = "Send freeze complete";
         }
         else
