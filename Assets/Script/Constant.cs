@@ -10,6 +10,7 @@ public class Constant
     public const string TOKEN_BEGIN_FREEZE = "0004";
     public const string TOKEN_BEGIN_FLIP = "0005";
     public const string TOKEN_BEGIN_ZOOM = "0006";
+    public const string TOKEN_BEGIN_ZOOMDEFAULT = "0007";
     public readonly static string TOKEN_SPLIT = "|";
     public readonly static string TOKEN_END = "@";
 }

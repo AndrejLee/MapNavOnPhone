@@ -22,7 +22,7 @@ public class MotionDetector : MonoBehaviour
     float lowPassFilterFactor;
     Vector3 lowPassValue;
     bool isFlipped = false;
-
+    bool isBarChartShown = false;
     void Start()
     {
         socketController = GameObject.Find("SocketReceiver");
@@ -76,6 +76,7 @@ public class MotionDetector : MonoBehaviour
         {
             case DeviceOrientation.FaceUp:
                 isFlipped = true;
+                isBarChartShown = false;
                 break;
             case DeviceOrientation.FaceDown:
                 if (isFlipped)
@@ -85,7 +86,11 @@ public class MotionDetector : MonoBehaviour
                 }
                 break;
             case DeviceOrientation.Portrait:
-                showBarChart();
+                if (!isBarChartShown)
+                {
+                    showBarChart();
+                    isBarChartShown = true;
+                }                
                 break;
         }
     }
@@ -100,6 +105,19 @@ public class MotionDetector : MonoBehaviour
         else
         {
             StatusSendSocket.text = "Send zoom fail";
+        }
+    }
+
+    private void ZoomMapDefault()
+    {
+        if (Client.isSocketReady)
+        {
+            socket.SendData(Constant.TOKEN_BEGIN_ZOOMDEFAULT + Constant.TOKEN_END);
+            StatusSendSocket.text = "Send zoom default complete";
+        }
+        else
+        {
+            StatusSendSocket.text = "Send zoom default fail";
         }
     }
 
