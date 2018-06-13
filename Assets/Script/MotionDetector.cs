@@ -17,7 +17,7 @@ public class MotionDetector : MonoBehaviour
     // This next parameter is initialized to 2.0 per Apple's recommendation,
     // or at least according to Brady! ;)
     float shakeDetectionThreshold = 2.0f;
-    float accelerationZThreshold = 1.5f;
+    float accelerationZThreshold = 2.0f;
 
     float lowPassFilterFactor;
     Vector3 lowPassValue;
@@ -39,16 +39,18 @@ public class MotionDetector : MonoBehaviour
 
     void Update()
     {
-        Vector3 acceleration = Input.acceleration;
-        lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
-        Vector3 deltaAcceleration = acceleration - lowPassValue;
+        //Vector3 acceleration = Input.acceleration;
+        //lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
+        //Vector3 deltaAcceleration = acceleration - lowPassValue;
         // For Zooming (rejected)
-        if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold)
+
+        float accelerationX = Input.acceleration.x;
+        if (Math.Abs(accelerationX) >= shakeDetectionThreshold)
         {
             // Perform your "shaking actions" here. If necessary, add suitable
             // guards in the if check above to avoid redundant handling during
             // the same shake (e.g. a minimum refractory period).
-            warningDebug.text = "Shake event detected at value " + deltaAcceleration.sqrMagnitude;
+            warningDebug.text = "Shake event detected at value " + accelerationX;
             Debug.Log("Shake event detected at time " + Time.time);
             if (Client.isSocketReady)
             {
