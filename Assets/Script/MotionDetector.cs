@@ -23,11 +23,15 @@ public class MotionDetector : MonoBehaviour
     Vector3 lowPassValue;
     bool isFlipped = false;
     bool isBarChartShown = false;
+    bool isUp = false;
+    bool isDown = false;
+    GameObject scroller;
     void Start()
     {
         socketController = GameObject.Find("SocketReceiver");
         socket = socketController.GetComponent<Client>();
-
+        scroller = GameObject.Find("Scroller");
+        scroller.SetActive(false);
         lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
         shakeDetectionThreshold *= shakeDetectionThreshold;
         lowPassValue = Input.acceleration;
@@ -39,22 +43,6 @@ public class MotionDetector : MonoBehaviour
         lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
         Vector3 deltaAcceleration = acceleration - lowPassValue;
         // For Zooming (rejected)
-        //float accelerationZ = Input.acceleration.x;
-        /*if (Math.Abs(accelerationZ) > accelerationZThreshold)
-        {
-            warningDebug.text = "Zoom event detected at value " + accelerationZ;
-            Debug.Log("Zoom event detected at time " + Time.time);
-            float zoomVal = 0;
-            if (accelerationZ > 0 ? true : false)
-            {
-                zoomVal = accelerationZ;
-                ZoomMap(zoomVal);
-            } else
-            {
-                zoomVal = accelerationZ;
-                ZoomMap(zoomVal);
-            }
-        } else */
         if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold)
         {
             // Perform your "shaking actions" here. If necessary, add suitable
@@ -77,8 +65,12 @@ public class MotionDetector : MonoBehaviour
             case DeviceOrientation.FaceUp:
                 isFlipped = true;
                 isBarChartShown = false;
+                isUp = true;
+                isDown = false;
                 break;
             case DeviceOrientation.FaceDown:
+                isDown = true;
+                isUp = false;
                 if (isFlipped)
                 {
                     ChangeMapType();
@@ -86,6 +78,8 @@ public class MotionDetector : MonoBehaviour
                 }
                 break;
             case DeviceOrientation.Portrait:
+                isUp = false;
+                isDown = false;
                 if (!isBarChartShown)
                 {
                     showBarChart();
@@ -93,6 +87,38 @@ public class MotionDetector : MonoBehaviour
                 }                
                 break;
         }
+
+        float accelerationZ = Input.acceleration.z;
+        if (Math.Abs(accelerationZ) > accelerationZThreshold)
+        {
+            if (isUp)
+            {
+                warningDebug.text = "Get Image event detected at value " + accelerationZ;
+                Debug.Log("Get Image event detected at value " + accelerationZ);
+                GetImageFromTable();
+            }
+            else if (isDown)
+            {
+                warningDebug.text = "Drop Image event detected at value " + accelerationZ;
+                Debug.Log("Drop Image event detected at value " + accelerationZ);
+                DropImageToTable();
+            }
+        }
+    }
+
+    public void CloseScroller()
+    {
+        scroller.SetActive(false);
+    }
+
+    private void DropImageToTable()
+    {
+        
+    }
+
+    private void GetImageFromTable()
+    {
+        
     }
 
     private void ZoomMap(float zoomVal)
@@ -123,7 +149,7 @@ public class MotionDetector : MonoBehaviour
 
     private void showBarChart()
     {
-        throw new NotImplementedException();
+        scroller.SetActive(true);
     }
 
     private void ChangeMapType()

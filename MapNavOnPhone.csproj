@@ -243,6 +243,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Barchart\BarChart\Scripts\BarChartComponent.cs" />
+    <Compile Include="Assets\Barchart\BarChart\Scripts\BarChartEditor.cs" />
+    <Compile Include="Assets\Barchart\BarChart\Scripts\BarChartManager.cs" />
+    <Compile Include="Assets\Barchart\PercentageBased\Scripts\Container.cs" />
+    <Compile Include="Assets\Barchart\PercentageBased\Scripts\ScaledComponent.cs" />
+    <Compile Include="Assets\Barchart\Scripts\ScrollSnapRect.cs" />
     <Compile Include="Assets\Client.cs" />
     <Compile Include="Assets\MAPNAV\Scripts\MoveCameraController.cs" />
     <Compile Include="Assets\Script\Constant.cs" />
