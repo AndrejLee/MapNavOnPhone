@@ -17,14 +17,14 @@ public class MotionDetector : MonoBehaviour
     // This next parameter is initialized to 2.0 per Apple's recommendation,
     // or at least according to Brady! ;)
     float shakeDetectionThreshold = 2.0f;
-    float accelerationZThreshold = 2.0f;
+    //float accelerationZThreshold = 2.0f;
 
     float lowPassFilterFactor;
     Vector3 lowPassValue;
     bool isFlipped = false;
     bool isBarChartShown = false;
-    bool isUp = false;
-    bool isDown = false;
+    //bool isUp = false;
+    //bool isDown = false;
     GameObject scroller;
     void Start()
     {
@@ -33,7 +33,6 @@ public class MotionDetector : MonoBehaviour
         scroller = GameObject.Find("Scroller");
         scroller.SetActive(false);
         lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
-        shakeDetectionThreshold *= shakeDetectionThreshold;
         lowPassValue = Input.acceleration;
     }
 
@@ -67,12 +66,12 @@ public class MotionDetector : MonoBehaviour
             case DeviceOrientation.FaceUp:
                 isFlipped = true;
                 isBarChartShown = false;
-                isUp = true;
-                isDown = false;
+                //isUp = true;
+                //isDown = false;
                 break;
             case DeviceOrientation.FaceDown:
-                isDown = true;
-                isUp = false;
+                //isDown = true;
+                //isUp = false;
                 if (isFlipped)
                 {
                     ChangeMapType();
@@ -80,8 +79,8 @@ public class MotionDetector : MonoBehaviour
                 }
                 break;
             case DeviceOrientation.Portrait:
-                isUp = false;
-                isDown = false;
+                //isUp = false;
+                //isDown = false;
                 if (!isBarChartShown)
                 {
                     showBarChart();
@@ -90,7 +89,7 @@ public class MotionDetector : MonoBehaviour
                 break;
         }
 
-        float accelerationZ = Input.acceleration.z;
+        /*float accelerationZ = Input.acceleration.z;
         if (Math.Abs(accelerationZ) > accelerationZThreshold)
         {
             if (isUp)
@@ -105,7 +104,7 @@ public class MotionDetector : MonoBehaviour
                 Debug.Log("Drop Image event detected at value " + accelerationZ);
                 DropImageToTable();
             }
-        }
+        }*/
     }
 
     public void CloseScroller()
@@ -113,7 +112,7 @@ public class MotionDetector : MonoBehaviour
         scroller.SetActive(false);
     }
 
-    private void DropImageToTable()
+    /*private void DropImageToTable()
     {
         
     }
@@ -121,7 +120,7 @@ public class MotionDetector : MonoBehaviour
     private void GetImageFromTable()
     {
         
-    }
+    }*/
 
     private void ZoomMap(float zoomVal)
     {

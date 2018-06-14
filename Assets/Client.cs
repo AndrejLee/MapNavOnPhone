@@ -12,20 +12,20 @@ public class Client : MonoBehaviour
 
     private Socket _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
     private byte[] _recieveBuffer = new byte[8142];
-    private const String COORDINATE_KEYWORD = "0001:";
-    private const String URL_KEYWORD = "0002:";
     public static float XReceived = 0;
     public static float YReceived = 0;
     public static String URLReceived = "";
+    public static int ImageNumber = -1;
     public static bool isSocketReady = false;
     public static bool isURLReceived = false;
+    public static bool isImageReceived = false;
 
     public void SetupServer()
     {
         try
         {
             _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _clientSocket.Connect(new IPEndPoint(IPAddress.Parse("192.168.1.10") , 1234));
+            _clientSocket.Connect(new IPEndPoint(IPAddress.Parse("192.168.1.18") , 1234));
             _clientSocket.BeginReceive(_recieveBuffer, 0, _recieveBuffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), null);
             isSocketReady = true;
         }
@@ -70,20 +70,29 @@ public class Client : MonoBehaviour
         string Receiver = Encoding.ASCII.GetString(recData);
         string[] tokens = Receiver.Split(Constant.TOKEN_END.ToCharArray());
 
-        string keyWord = tokens[0].Substring(0, 5);
+        string keyWord = tokens[0].Substring(0, 4);
 
         switch (keyWord)
         {
-            case COORDINATE_KEYWORD:
+            case Constant.TOKEN_BEGIN_POSITION + ":":
                 extractCoordination(tokens[0]);
                 break;
-            case URL_KEYWORD:
+            case Constant.TOKEN_BEGIN_URL + ":":
                 extractURL(tokens[0]);
+                break;
+            case Constant.TOKEN_BEGIN_GET + ":":
+                extractImageNumber(tokens[0]);
                 break;
         }
 
         //Start receiving again
         _clientSocket.BeginReceive(_recieveBuffer, 0, _recieveBuffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), null);
+    }
+
+    private void extractImageNumber(string v)
+    {
+        ImageNumber = int.Parse( v.Substring(5, v.Length - 5));
+        isImageReceived = true;
     }
 
     private void extractURL(string v)

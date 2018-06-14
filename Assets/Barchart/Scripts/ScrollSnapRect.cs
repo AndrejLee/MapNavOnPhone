@@ -39,7 +39,7 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
     
     // number of pages in container
     private int _pageCount;
-    private int _currentPage;
+    public int _currentPage;
 
     // whether lerping is in progress and target lerp position
     private bool _lerp;
@@ -226,6 +226,7 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
     //------------------------------------------------------------------------
     private void NextScreen() {
         LerpToPage(_currentPage + 1);
+
     }
 
     //------------------------------------------------------------------------
