@@ -15,9 +15,10 @@ public class collaborativecontroller : MonoBehaviour {
     bool isDropMode = true;
     bool isUp = false;
     bool isDown = false;
-    float accelerationZThreshold = 2.0f;
+    float accelerationZThreshold = 1.5f;
     List<Texture> TextureList = new List<Texture>();
     string[] FileNameList = { "boku_no_hero", "gintama", "kuroko", "nanatsu_taizai", "one_punch_man" };
+    public Text MyText;
 
 	// Use this for initialization
 	void Start () {
@@ -59,14 +60,16 @@ public class collaborativecontroller : MonoBehaviour {
         float accelerationZ = Input.acceleration.z;
         if (Math.Abs(accelerationZ) > accelerationZThreshold)
         {
-            if (isUp && accelerationZ < 0)
+            if (isUp && !isDropMode && accelerationZ < 0)
             {
                 Debug.Log("Get Image event detected at value " + accelerationZ);
+                MyText.text = "Get Image event detected at value " + accelerationZ;
                 GetImageFromTable();
             }
-            else if (isDown && accelerationZ > 0)
+            else if (isDown && isDropMode && accelerationZ > 0)
             {
                 Debug.Log("Drop Image event detected at value " + accelerationZ);
+                MyText.text = "Drop Image event detected at value " + accelerationZ;
                 DropImageToTable();
             }
         }
