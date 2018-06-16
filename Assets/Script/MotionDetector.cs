@@ -159,6 +159,10 @@ public class MotionDetector : MonoBehaviour
         {
             socket.SendData(Constant.TOKEN_BEGIN_FLIP + Constant.TOKEN_END);
             StatusSendSocket.text = "Send flip complete";
+
+            Debug.Log("Changemaptype");
+            GameObject map = GameObject.Find("Map");
+            map.SendMessage("ChangeMapType");
         }
         else
         {
@@ -176,6 +180,32 @@ public class MotionDetector : MonoBehaviour
         else
         {
             StatusSendSocket.text = "Send freeze fail";
+        }
+    }
+
+    public void SetFlag()
+    {
+        if (Client.isSocketReady)
+        {
+            socket.SendData(Constant.TOKEN_BEGIN_SET_FLAG + Constant.TOKEN_END);
+            StatusSendSocket.text = "Send flag complete";
+        }
+        else
+        {
+            StatusSendSocket.text = "Send flag fail";
+        }
+    }
+
+    public void Analyze()
+    {
+        if (Client.isSocketReady)
+        {
+            socket.SendData(Constant.TOKEN_BEGIN_ANALYZE + Constant.TOKEN_END);
+            StatusSendSocket.text = "Send analyze complete";
+        }
+        else
+        {
+            StatusSendSocket.text = "Send analyze fail";
         }
     }
 }

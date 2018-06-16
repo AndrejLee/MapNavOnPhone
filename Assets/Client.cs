@@ -70,7 +70,7 @@ public class Client : MonoBehaviour
         string Receiver = Encoding.ASCII.GetString(recData);
         string[] tokens = Receiver.Split(Constant.TOKEN_END.ToCharArray());
 
-        string keyWord = tokens[0].Substring(0, 4);
+        string keyWord = tokens[0].Substring(0, 5);
 
         switch (keyWord)
         {

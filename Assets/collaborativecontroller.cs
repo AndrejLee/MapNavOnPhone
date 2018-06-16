@@ -15,7 +15,7 @@ public class collaborativecontroller : MonoBehaviour {
     bool isDropMode = true;
     bool isUp = false;
     bool isDown = false;
-    float accelerationZThreshold = 1.5f;
+    float accelerationZThreshold = 1.8f;
     List<Texture> TextureList = new List<Texture>();
     string[] FileNameList = { "boku_no_hero", "gintama", "kuroko", "nanatsu_taizai", "one_punch_man" };
     public Text MyText;
@@ -79,6 +79,7 @@ public class collaborativecontroller : MonoBehaviour {
             ImageContent.GetComponent<RawImage>().texture = TextureList[Client.ImageNumber];
             Client.isImageReceived = false;
             Client.ImageNumber = -1;
+            GameObject.Find("Capsule").GetComponent<InforCapsuleCollide>().EnableRigidbody();
         }
     }
 
@@ -119,6 +120,11 @@ public class collaborativecontroller : MonoBehaviour {
     {
         isDropMode = false;
         ScrollerContent.SetActive(false);
-        GetImageContent.SetActive(true);
+        GetImageContent.SetActive(false);
+    }
+
+    public void showImage()
+    {
+
     }
 }

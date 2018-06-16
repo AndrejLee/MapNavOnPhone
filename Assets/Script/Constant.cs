@@ -13,6 +13,8 @@ public class Constant
     public const string TOKEN_BEGIN_ZOOMDEFAULT = "0007";
     public const string TOKEN_BEGIN_DROP = "0008";
     public const string TOKEN_BEGIN_GET = "0009";
+    public const string TOKEN_BEGIN_SET_FLAG = "0010";
+    public const string TOKEN_BEGIN_ANALYZE = "0011";
     public readonly static string TOKEN_SPLIT = "|";
     public readonly static string TOKEN_END = "@";
 }

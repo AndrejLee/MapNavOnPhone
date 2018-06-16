@@ -343,6 +343,17 @@ function ReSet(){
 	cam.position.z = ((cam.position.z * 20037508.34 / 180)/100)-iniRef.z; */
 }
 
+public function ChangeMapType() {
+    if (mapping == false) {
+        if (index < maptype.Length - 1)
+            index = index + 1;
+        else
+            index = 0;
+        MapPosition();
+        ReScale();
+    }
+}
+
 
 //ONLINE MAP DOWNLOAD
 function Online(){
