@@ -12,6 +12,7 @@ public class collaborativecontroller : MonoBehaviour {
     GameObject GetImageContent;
     GameObject ImageContent;
     ScrollSnapRect ScrollRect;
+    InputField Message;
     bool isDropMode = true;
     bool isUp = false;
     bool isDown = false;
@@ -27,6 +28,7 @@ public class collaborativecontroller : MonoBehaviour {
         ScrollerContent = GameObject.Find("ScrollerDrop");
         GetImageContent = GameObject.Find("ImageContentGet");
         ImageContent = GameObject.Find("ImageContent");
+        Message = GameObject.Find("Message").GetComponent<InputField>();
         ScrollRect = ScrollerContent.GetComponent<ScrollSnapRect>();
         ScrollerContent.SetActive(true);
         GetImageContent.SetActive(false);
@@ -87,7 +89,7 @@ public class collaborativecontroller : MonoBehaviour {
     {
         if (Client.isSocketReady)
         {
-            socket.SendData(Constant.TOKEN_BEGIN_DROP + ":" + ScrollRect._currentPage + Constant.TOKEN_END);
+            socket.SendData(Constant.TOKEN_BEGIN_DROP + ":" + ScrollRect._currentPage + "|" + Message.text + Constant.TOKEN_END);
             Debug.Log("Drop event detected at image " + Time.time);
         }
         else
@@ -120,7 +122,7 @@ public class collaborativecontroller : MonoBehaviour {
     {
         isDropMode = false;
         ScrollerContent.SetActive(false);
-        GetImageContent.SetActive(false);
+        GetImageContent.SetActive(true);
     }
 
     public void showImage()
