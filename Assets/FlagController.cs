@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlagController : MonoBehaviour {
+public class FlagController : MonoBehaviour
+{
 
     List<Vector3> listFlagPosition = new List<Vector3>();
     List<GameObject> listFlags = new List<GameObject>();
@@ -12,16 +13,19 @@ public class FlagController : MonoBehaviour {
     GameObject myCamera;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         myCamera = GameObject.Find("Camera");
         FlagObject = GameObject.Find("flagobject");
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        FlagObject.SetActive(false);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         //curPos = myCamera.transform.localPosition;
 
-        for (int i = 0; i < listFlagPosition.Count; i++ )
+        for (int i = 0; i < listFlagPosition.Count; i++)
         {
             if (listFlagPosition[i].z == 1)
             {
@@ -31,7 +35,7 @@ public class FlagController : MonoBehaviour {
             listFlags[i].SetActive(true);
             listFlags[i].transform.localPosition = new Vector2(listFlagPosition[i].x, listFlagPosition[i].y);
         }
-	}
+    }
 
     public void AddFlag()
     {
@@ -49,7 +53,7 @@ public class FlagController : MonoBehaviour {
         flag.transform.SetParent(transform);
         flag.SetActive(true);
         flag.transform.localRotation = Quaternion.Euler(0, 90, 0);
-        flag.transform.localScale = new Vector3(1f, 1, 1f);
+        flag.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
 
         return flag;
     }
