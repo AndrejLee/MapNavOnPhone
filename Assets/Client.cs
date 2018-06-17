@@ -19,13 +19,13 @@ public class Client : MonoBehaviour
     public static bool isSocketReady = false;
     public static bool isURLReceived = false;
     public static bool isImageReceived = false;
-
+    public string ip = "192.168.43.218";
     public void SetupServer()
     {
         try
         {
             _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _clientSocket.Connect(new IPEndPoint(IPAddress.Parse("192.168.1.18") , 1234));
+            _clientSocket.Connect(new IPEndPoint(IPAddress.Parse(ip) , 1234));
             _clientSocket.BeginReceive(_recieveBuffer, 0, _recieveBuffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), null);
             isSocketReady = true;
         }

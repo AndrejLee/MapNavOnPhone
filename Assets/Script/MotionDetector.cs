@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class MotionDetector : MonoBehaviour
 {
     private GameObject socketController;
+    public GameObject flagController;
     Client socket;
     public Text warningDebug;
     public Text StatusSendSocket;
@@ -55,7 +56,8 @@ public class MotionDetector : MonoBehaviour
             {
                 socket.SendData(Constant.TOKEN_BEGIN_SHAKE + Constant.TOKEN_END);
                 StatusSendSocket.text = "Send shake complete";
-            } else
+            }
+            else
             {
                 StatusSendSocket.text = "Send shake fail";
             }
@@ -85,7 +87,7 @@ public class MotionDetector : MonoBehaviour
                 {
                     showBarChart();
                     isBarChartShown = true;
-                }                
+                }
                 break;
         }
 
@@ -188,6 +190,7 @@ public class MotionDetector : MonoBehaviour
         if (Client.isSocketReady)
         {
             socket.SendData(Constant.TOKEN_BEGIN_SET_FLAG + Constant.TOKEN_END);
+            flagController.GetComponent<FlagController>().AddFlag();
             StatusSendSocket.text = "Send flag complete";
         }
         else
