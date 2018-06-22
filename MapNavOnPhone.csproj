@@ -251,6 +251,7 @@
     <Compile Include="Assets\Barchart\Scripts\ScrollSnapRect.cs" />
     <Compile Include="Assets\Client.cs" />
     <Compile Include="Assets\collaborativecontroller.cs" />
+    <Compile Include="Assets\FlagController.cs" />
     <Compile Include="Assets\InforCapsuleCollide.cs" />
     <Compile Include="Assets\MAPNAV\Scripts\MoveCameraController.cs" />
     <Compile Include="Assets\Script\Constant.cs" />
