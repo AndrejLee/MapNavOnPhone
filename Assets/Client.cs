@@ -19,7 +19,7 @@ public class Client : MonoBehaviour
     public static bool isSocketReady = false;
     public static bool isURLReceived = false;
     public static bool isImageReceived = false;
-    public string ip = "192.168.43.218";
+    public string ip = "192.168.1.12";
     public void SetupServer()
     {
         try
