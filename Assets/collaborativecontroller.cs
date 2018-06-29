@@ -18,7 +18,7 @@ public class collaborativecontroller : MonoBehaviour {
     bool isDown = false;
     float accelerationZThreshold = 1.8f;
     List<Texture> TextureList = new List<Texture>();
-    string[] FileNameList = { "boku_no_hero", "gintama", "kuroko", "nanatsu_taizai", "one_punch_man" };
+    string[] FileNameList = { "hcmus2", "nha_i", "nhadieuhanh", "nguoi-hoc"};
     public Text MyText;
 
 	// Use this for initialization
