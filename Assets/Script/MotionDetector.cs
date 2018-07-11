@@ -114,6 +114,19 @@ public class MotionDetector : MonoBehaviour
         scroller.SetActive(false);
     }
 
+    public void ShowHeatMap()
+    {
+        if (Client.isSocketReady)
+        {
+            socket.SendData(Constant.TOKEN_BEGIN_HEAT_MAP +  Constant.TOKEN_END);
+            StatusSendSocket.text = "Send heat map complete";
+        }
+        else
+        {
+            StatusSendSocket.text = "Send heat map fail";
+        }
+    }
+
     /*private void DropImageToTable()
     {
         

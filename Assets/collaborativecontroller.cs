@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class collaborativecontroller : MonoBehaviour {
@@ -21,8 +23,17 @@ public class collaborativecontroller : MonoBehaviour {
     string[] FileNameList = { "hcmus2", "nha_i", "nhadieuhanh", "nguoi-hoc"};
     public Text MyText;
 
-	// Use this for initialization
-	void Start () {
+
+    public float durationThreshold = 1.5f;
+
+    public UnityEvent onLongPress = new UnityEvent();
+
+    private bool isPointerDown = false;
+    private bool longPressTriggered = false;
+    private float timePressStarted;
+
+    // Use this for initialization
+    void Start () {
         socketController = GameObject.Find("SocketReceiver");
         socket = socketController.GetComponent<Client>();
         ScrollerContent = GameObject.Find("ScrollerDrop");
@@ -46,6 +57,48 @@ public class collaborativecontroller : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+
+        if (Input.touchCount == 1 && isUp && isDropMode)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            // Handle finger movements based on touch phase.
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    timePressStarted = Time.time;
+                    break;
+                case TouchPhase.Ended:
+                    if (Time.time - timePressStarted > durationThreshold)
+                    {
+                        DropImageToTable();
+                    }
+                    break;
+            }
+        }
+
+        if (Input.touchCount == 2 && isUp && !isDropMode)
+        {
+            // Store both touches.
+            Touch touchZero = Input.GetTouch(0);
+            Touch touchOne = Input.GetTouch(1);
+
+            // Find the position in the previous frame of each touch.
+            Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
+            Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+
+            // Find the magnitude of the vector (the distance) between the touches in each frame.
+            float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+            float touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
+
+            // Find the difference in the distances between each frame.
+            float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
+
+            if (deltaMagnitudeDiff > 20)
+            {
+                GetImageFromTable();
+            }
+        }
 
         switch (Input.deviceOrientation)
         {
