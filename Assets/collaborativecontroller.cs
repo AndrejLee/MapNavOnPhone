@@ -22,11 +22,7 @@ public class collaborativecontroller : MonoBehaviour {
     List<Texture> TextureList = new List<Texture>();
     string[] FileNameList = { "hcmus2", "nha_i", "nhadieuhanh", "nguoi-hoc"};
     public Text MyText;
-
-
     public float durationThreshold = 1.5f;
-
-    public UnityEvent onLongPress = new UnityEvent();
 
     private bool isPointerDown = false;
     private bool longPressTriggered = false;
@@ -67,13 +63,18 @@ public class collaborativecontroller : MonoBehaviour {
             {
                 case TouchPhase.Began:
                     timePressStarted = Time.time;
+                    isPointerDown = true;
                     break;
                 case TouchPhase.Ended:
-                    if (Time.time - timePressStarted > durationThreshold)
-                    {
-                        DropImageToTable();
-                    }
+                    isPointerDown = false;
                     break;
+            }
+
+
+            if (isPointerDown && Time.time - timePressStarted > durationThreshold)
+            {
+                DropImageToTable();
+                isPointerDown = false;
             }
         }
 
